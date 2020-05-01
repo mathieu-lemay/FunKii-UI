@@ -929,7 +929,8 @@ class RootWindow(tk.Tk):
                         if tick == "1":
                             self.has_ticket.append(titleid)
 
-                        longname = name + "  --" + region + "  -" + content_type
+                        clean_name = name.replace('\n', ' ').title()
+                        longname = f"{clean_name} [{region}] ({content_type})"
                         entry = (name, region, titleid, titlekey, content_type, longname)
                         entry2 = longname
                         self.reverse_title_names[longname] = titleid
