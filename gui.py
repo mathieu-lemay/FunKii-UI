@@ -679,8 +679,8 @@ class RootWindow(tk.Tk):
         try:
             with open("config.json", "r") as cfg:
                 config = json.load(cfg)
-                site = config["keysite"]
-                if fnku.hashlib.md5(site.encode("utf-8")).hexdigest() == fnku.KEYSITE_MD5:
+                site = fnku.decode_keysite(config["keysite"])
+                if fnku.validate_keysite(site):
                     self.update_keysite_widgets()
 
         except IOError:
@@ -1221,10 +1221,11 @@ class RootWindow(tk.Tk):
 
     def submit_key_site(self):
         site = self.keysite_box.get().strip()
-        if fnku.hashlib.md5(site.encode("utf-8")).hexdigest() == fnku.KEYSITE_MD5 or True:
+
+        if fnku.validate_keysite(site):
             print("Correct key site, now saving...")
             config = fnku.load_config()
-            config["keysite"] = site
+            config["keysite"] = fnku.encode_keysite(site)
             fnku.save_config(config)
             print("done saving, you are good to go!")
             self.update_keysite_widgets()
